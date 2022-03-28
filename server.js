@@ -37,20 +37,18 @@ app.use('/api', (req, res, next) => {
     next();
 })
 
-app.use('/api', restRouter)
-
-
-if (config.NODE_ENV === "development") {
-    console.log("This is the development environment".yellow)
-    server = http.createServer(app)
-} else {
-    console.log("This is the production environment".yellow)
-    server = http.createServer(app)
-}
-
 app.get('/', (req, res) => {
     res.send('Yacht-Charter App server is alive!');
 })
+app.use('/api', restRouter)
+
+if (config.NODE_ENV === "development") {
+    console.log("This is the development environment".inverse.yellow)
+    server = http.createServer(app)
+} else {
+    console.log("This is the production environment".inverse.yellow)
+    server = http.createServer(app)
+}
 
 mongoose.connect(
     config.DB_URL,
@@ -60,13 +58,13 @@ mongoose.connect(
     }
 )
 .then(() => {
-    console.log('DB Connected Successfully!'.green.inverse)
+    console.log('DB Connected Successfully!'.green)
 })
 .catch((err) => {
     console.log(`Error: ${err}`.red.inverse);
 })
 
-let PORT = config.PORT || 8080;
+let PORT = config.PORT || 8000;
 server.listen(PORT, async () => {
     try {
         console.log(`Server listening on port ${PORT}`.green)
