@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const collectionName = 'home'
 const homeSchema = Schema({
-    page: { type: String, default: "Home" },
+    page: String,
     media: {
         landing_video: String,
         image_1: String

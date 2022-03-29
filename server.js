@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import helmet from "helmet";
 import colors from "colors";
+import path from "path";
 import { appConfig } from "./config/index.js"
 import { restRouter } from "./api/restRouter.js"
 
@@ -15,6 +16,7 @@ var config = appConfig();
 
 const app = express()
 let server = null;
+const __dirname = path.resolve(path.dirname(''));
 // require("dotenv").config()
 
 app.use(cors())
@@ -37,10 +39,14 @@ app.use('/api', (req, res, next) => {
     next();
 })
 
-app.get('/', (req, res) => {
+app.get('/api/health', (req, res) => {
     res.send('Yacht-Charter App server is alive!');
 })
+
 app.use('/api', restRouter)
+
+app.use(express.static(__dirname + '/public/home'))
+app.use(express.static(__dirname + '/public/boat-info'))
 
 if (config.NODE_ENV === "development") {
     console.log("This is the development environment".inverse.yellow)

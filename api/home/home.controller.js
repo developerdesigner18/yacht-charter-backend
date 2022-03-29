@@ -6,11 +6,11 @@ import { response } from "express";
 // get all home page data
 export const getHomeData = async (req, res) => {
     try {
-        const data = await Home.find({});
+        const data = await Home.findOne({page: "Home"});
         if (data <= 0) {
             res.status(401).send({
                 success: false,
-                message: 'Home page data not found'
+                message: 'home page data not found'
             })
         }
         else {
@@ -18,14 +18,14 @@ export const getHomeData = async (req, res) => {
                 success: true,
                 data: data,
                 length: data.length,
-                message: 'Home page data fetched successfully'
+                message: 'home page data fetched successfully'
             })
         }
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: err.message
+            message: 'home.controller: ' + err.message
         })
     }
 }
@@ -40,12 +40,12 @@ export const insertHomeData = async (req, res) => {
         // home.save()
 
         const content = req.body
+        const media = req.files
         const page_id = content.page_id
         const data = {
-            page: "Home",
             media: {
-                landing_video: content.landing_video,
-                image_1: content.image_1
+                landing_video: media.landing_video != undefined ? media.landing_video[0].filename : '',
+                image_1: media.image_1 != undefined ? media.image_1[0].filename : ''
             },
             content: {
                 tag_line: content.tag_line,
@@ -60,19 +60,19 @@ export const insertHomeData = async (req, res) => {
         };
 
         // checkUserData(userId);
-        console.log('data', data);
-        const homeData = await Home.findByIdAndUpdate(page_id, data)
+        const homeData = await Home.findByIdAndUpdate(page_id, data, {new: true})
         // addData(userId, data, "work");
 
         res.status(201).send({
             success: true,
+            data: homeData,
             message: 'home page content updated successfully',
         })
     }
     catch (err) {
         res.status(401).send({
             success: false,
-            message: err.message
+            message: 'home.controller: ' + err.message
         });
     }
 }
