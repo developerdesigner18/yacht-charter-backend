@@ -11,6 +11,7 @@ import colors from "colors";
 import path from "path";
 import { appConfig } from "./config/index.js"
 import { restRouter } from "./api/restRouter.js"
+import { authRouter } from "./auth/authRouter.js"
 
 var config = appConfig();
 
@@ -44,6 +45,7 @@ app.get('/api/health', (req, res) => {
 })
 
 app.use('/api', restRouter)
+app.use('/auth', authRouter)
 
 app.use(express.static(__dirname + '/public/home'))
 app.use(express.static(__dirname + '/public/boat-info'))
