@@ -12,7 +12,6 @@ const expirationInterval =
 
 const tokenForUser = (user) => {
   try {
-    console.log(user.emailId)
     const timestamp = new Date().getTime();
     return jwt.sign(
       {
@@ -21,7 +20,7 @@ const tokenForUser = (user) => {
         // entityDetails: loginDetails.relatedFaEntities[0],
         exp: Math.floor(Date.now() / 1000) + expirationInterval
       },
-      configKey.secrets.JWT_SECRET
+      config.JWT_SECRET
     );
   }
   catch (err) {
@@ -32,7 +31,6 @@ const tokenForUser = (user) => {
 // signin api
 export const signin = async (req, res) => {
     const { email } = req.body;
-    console.log(email);
     try {
       const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
       const mobileNoRegexp = /\(?\d{3}\)?-? *\d{3}-? *-?\d{6}/;

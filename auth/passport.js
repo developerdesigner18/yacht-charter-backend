@@ -6,36 +6,38 @@ const require = createRequire(import.meta.url); // construct the require method
 import { appConfig } from "../config/index.js"
 import passport from "passport";
 
-// const LocalStrategy = require("passport-local").Strategy;
-// const JwtStrategy = require("passport-jwt").Strategy;
+// import LocalStrategy from "passport-local";
+// import JwtStrategy from "passport-jwt";
 
-import LocalStrategy from "passport-local";
+const LocalStrategy = require("passport-local").Strategy;
 const JwtStrategy = require("passport-jwt").Strategy;
 
 var config = appConfig();
 
 
 const localOptions = {
-    usernameField: "email"
+    usernameField: "email",
+    passwordField: "password"
   };
 
 const localLogin = new LocalStrategy(
     localOptions,
     async (email, password, done)=>{
         try{
+            console.log(email, password);
             const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
             const mobileNoRegexp = /\(?\d{3}\)?-? *\d{3}-? *-?\d{6}/;
             if(emailRegexp.test(email)){
                 const userExistence = await UserInfo.findOne({emailId: email.toLowerCase()})
                 if(!userExistence){
-                    return done("Either Password or EmailId Doesn't match",false);
+                    return done("Either Password or EmailId Doesn't match", false);
                 }
                 const validPassword = await bcrypt.compareSync(password, userExistence.password);
                 //console.log(validPassword)
                 if(!validPassword){
-                    return done("Password is Incorrect Please try Again later",false);
+                    return done("Password is Incorrect Please try Again later", false);
                 }
-                return done (null,userExistence);
+                return done (null, userExistence);
             }
             // else if(mobileNoRegexp.test(email)){
             //     const userExistence = await UserInfo.findOne({mobileNo: email})
