@@ -30,12 +30,12 @@ const localLogin = new LocalStrategy(
             if(emailRegexp.test(email)){
                 const userExistence = await UserInfo.findOne({emailId: email.toLowerCase()})
                 if(!userExistence){
-                    return done("Either Password or EmailId Doesn't match", false);
+                    return done("User Doesn't Exist.", false);
                 }
                 const validPassword = await bcrypt.compareSync(password, userExistence.password);
                 //console.log(validPassword)
                 if(!validPassword){
-                    return done("Password is Incorrect Please try Again later", false);
+                    return done("Password is Incorrect. Please try Again with Correct Credentials.", false);
                 }
                 return done (null, userExistence);
             }
@@ -53,7 +53,7 @@ const localLogin = new LocalStrategy(
             // }
         }
         catch(err){
-            return done("System was unable to process the details", false);
+            return done("System was unable to process the details.", false);
         }
     }
 )
