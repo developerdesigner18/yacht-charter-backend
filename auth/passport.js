@@ -37,8 +37,9 @@ const localLogin = new LocalStrategy(
                 if(!validPassword){
                     return done("Password is Incorrect. Please try Again with Correct Credentials.", false);
                 }
-                return done (null, userExistence);
-            }
+                return done(null, userExistence);
+            } else { return done("Please enter a valid e-mail address.", false); }
+
             // else if(mobileNoRegexp.test(email)){
             //     const userExistence = await UserInfo.findOne({mobileNo: email})
             //     //console.log(userExistence)

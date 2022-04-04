@@ -8,6 +8,7 @@ import path from 'path';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import { Home } from "./home.model.js"
+import { checkJWT } from "../../middleware/check-jwt.js"
 
 export const homeRouter = express.Router();
 
@@ -52,4 +53,4 @@ const uploadHomeContent = multer({
 })
 
 homeRouter.get("/getHomeData", getHomeData)
-homeRouter.post("/insertHomeData", uploadHomeContent.fields([{name: 'landing_video', maxCount: 1}, {name: 'image_1', maxCount: 1}]), insertHomeData)
+homeRouter.post("/insertHomeData", checkJWT, uploadHomeContent.fields([{name: 'landing_video', maxCount: 1}, {name: 'image_1', maxCount: 1}]), insertHomeData)

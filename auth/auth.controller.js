@@ -35,7 +35,7 @@ export const signin = async (req, res) => {
       const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
       const mobileNoRegexp = /\(?\d{3}\)?-? *\d{3}-? *-?\d{6}/;
       if (emailRegexp.test(email)) {
-        const userExistence = await UserInfo.findOne({ emailId: email.toLowerCase() })
+        const userExistence = await UserInfo.findOne({ emailId: email.toLowerCase() }, { password: 0 })
         if (userExistence) {
           res.status(200).send({
             success: true,

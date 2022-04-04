@@ -10,6 +10,7 @@ import path from 'path';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import { BoatInfo } from "./boat-info.model.js"
+import { checkJWT } from "../../middleware/check-jwt.js"
 
 export const boatInfoRouter = express.Router();
 
@@ -29,17 +30,10 @@ var boatInfoStorage = multer.diskStorage({
 
     filename: async function (req, file, cb) {
         // const decoded = await jwt.verify(req.headers.token, configKey.secrets.JWT_SECRET);
-        if(req.query.id) {
-
-            const data = await BoatInfo.findOne({ page: "Home" })
+            // const data = await BoatInfo.findOne({ page: "Home" })
             const extension = file.originalname.substring(file.originalname.lastIndexOf('.'));
-            cb(null, data._id + "_" + Date.now() + extension)
-        } else {
-            const extension = file.originalname.substring(file.originalname.lastIndexOf('.'));
-            cb(null, Date.now() + extension)
-        }
+            cb(null, Math.random().toString(36).substring(2, 15) + "_" + Date.now() + extension)
     }
-
 })
 
 const uploadBoatImages = multer({
@@ -60,5 +54,5 @@ const uploadBoatImages = multer({
 
 boatInfoRouter.get("/getBoatInfoAll", getBoatInfoAll)
 boatInfoRouter.get("/getBoatInfoById", getBoatInfoById)
-boatInfoRouter.post("/insertBoatInfo", uploadBoatImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'boat_images', maxCount: 20}]), insertBoatInfo)
-boatInfoRouter.post("/updateBoatInfo", uploadBoatImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'boat_images', maxCount: 20}]), updateBoatInfo)
+boatInfoRouter.post("/insertBoatInfo", checkJWT, uploadBoatImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'boat_images', maxCount: 20}]), insertBoatInfo)
+boatInfoRouter.post("/updateBoatInfo", checkJWT, uploadBoatImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'boat_images', maxCount: 20}]), updateBoatInfo)

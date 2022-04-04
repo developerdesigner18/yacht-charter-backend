@@ -6,9 +6,7 @@ import { response } from "express";
 // get all boat-info data
 export const getBoatInfoAll = async (req, res) => {
     try {
-        const boat_id = req.params.boat_id
-
-        const data = await BoatInfo.findById(boat_id);
+        const data = await BoatInfo.find();
         if (data <= 0) {
             res.status(401).send({
                 success: false,
@@ -16,7 +14,7 @@ export const getBoatInfoAll = async (req, res) => {
             })
         }
         else {
-            res.status(201).send({
+            res.status(200).send({
                 success: true,
                 data: data,
                 length: data.length,
@@ -35,7 +33,7 @@ export const getBoatInfoAll = async (req, res) => {
 // get boat-info data by id
 export const getBoatInfoById = async (req, res) => {
     try {
-        const boat_id = req.params.boat_id
+        const boat_id = req.query.bid
 
         const data = await BoatInfo.findById(boat_id);
         if (data <= 0) {
@@ -90,12 +88,12 @@ export const insertBoatInfo = async (req, res) => {
             }
         })
 
-        for(let i=0; i<req.files.boat_images; i++) {
-            data.boat_images.push({name: req.files.images[i].filename})
+        for(let i = 0; i < media.boat_images.length; i++) {
+            data.boat_images.push({name: media.boat_images[i].filename})
         }
 
         // checkUserData(userId);
-        const boatInfoData = await BoatInfo.save(data, {new: true})
+        const boatInfoData = await BoatInfo.create(data)
         // addData(userId, data, "work");
 
         res.status(201).send({
@@ -120,7 +118,7 @@ export const updateBoatInfo = async (req, res) => {
         // var data = content;
         // const home = new Home(data);
         // home.save()
-
+        const boat_id = req.query.bid
         const content = req.body
         const media = req.files
 
@@ -146,7 +144,7 @@ export const updateBoatInfo = async (req, res) => {
         }
 
         // checkUserData(userId);
-        const boatInfoData = await BoatInfo.findByIdAndUpdate(page_id, data, {new: true})
+        const boatInfoData = await BoatInfo.findByIdAndUpdate(boat_id, data, {new: true})
         // addData(userId, data, "work");
 
         res.status(201).send({
