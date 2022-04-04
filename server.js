@@ -32,6 +32,7 @@ app.get('/api/health', (req, res) => {
 })
 
 app.use('/api', restRouter, (req, res, next) => {
+    res.set('Access-Control-Allow-Origin', 'http://localhost:8000');
     res.header("Access-Control-Allow-Origin", "*")
     res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS")
     res.header(
@@ -44,6 +45,7 @@ app.use('/api', restRouter, (req, res, next) => {
     next();
 })
 app.use('/auth', authRouter, (req, res, next) => {
+    res.set('Access-Control-Allow-Origin', 'http://localhost:8000');
     res.header("Access-Control-Allow-Origin", "*")
     res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS")
     res.header(

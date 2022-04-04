@@ -14,7 +14,7 @@ export const getHomeData = async (req, res) => {
             })
         }
         else {
-            res.status(201).send({
+            res.status(200).send({
                 success: true,
                 data: data,
                 length: data.length,
@@ -39,9 +39,9 @@ export const insertHomeData = async (req, res) => {
         // const home = new Home(data);
         // home.save()
 
+        const page_id = req.query.pid
         const content = req.body
         const media = req.files
-        const page_id = content.page_id
         const data = {
             media: {
                 landing_video: media.landing_video != undefined ? media.landing_video[0].filename : '',
