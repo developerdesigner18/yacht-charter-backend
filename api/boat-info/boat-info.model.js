@@ -5,6 +5,7 @@ const { Schema } = mongoose;
 const collectionName = 'boat-info'
 const boatInfoSchema = Schema({
     cover_image: String,
+    boat_type: String,
     boat_info: {
         name: String,
         width: String,

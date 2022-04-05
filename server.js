@@ -25,38 +25,37 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ limit: "100mb", extended: true }));
 app.use(bodyParser.json({ limit: "100mb" }));
-app.use(helmet());
+// app.use(helmet({ crossOriginResourcePolicy: { policy: "same-site" } }));
 
 app.get('/api/health', (req, res) => {
     res.send('Yacht-Charter App server is alive!');
 })
 
-app.use('/api', restRouter, (req, res, next) => {
-    res.set('Access-Control-Allow-Origin', 'http://localhost:8000');
-    res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS")
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Authorization, Accept, Access-Control-Al" +
-        "low-Methods"
-    )
-    res.header("X-Frame-Options", "deny")
-    res.header("X-Content-Type-Options", "nosniff")
-    next();
-})
-app.use('/auth', authRouter, (req, res, next) => {
-    res.set('Access-Control-Allow-Origin', 'http://localhost:8000');
-    res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS")
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Authorization, Accept, Access-Control-Al" +
-        "low-Methods"
-    )
-    res.header("X-Frame-Options", "deny")
-    res.header("X-Content-Type-Options", "nosniff")
-    next();
-})
+// app.all('*', function(req, res, next) {
+//     res.header('Access-Control-Allow-Origin', '*');
+//     res.header('Access-Control-Allow-Credentials', 'true');
+//     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+//     res.header(
+//       'Access-Control-Allow-Headers',
+//       'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+//     );
+//     next();
+
+//     res.set('Access-Control-Allow-Origin', 'http://localhost:8000');
+//     res.header("Access-Control-Allow-Origin", "*")
+//     res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS")
+//     res.header(
+//         "Access-Control-Allow-Headers",
+//         "Origin, X-Requested-With, Content-Type, Authorization, Accept, Access-Control-Al" +
+//         "low-Methods"
+//     )
+//     res.header("X-Frame-Options", "deny")
+//     res.header("X-Content-Type-Options", "nosniff")
+//     next();
+//   });
+
+app.use('/api', restRouter)
+app.use('/auth', authRouter)
 
 app.use(express.static(__dirname + '/public/home'))
 app.use(express.static(__dirname + '/public/boat-info'))

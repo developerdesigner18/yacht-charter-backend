@@ -73,6 +73,7 @@ export const insertBoatInfo = async (req, res) => {
 
         const data = new BoatInfo({
             cover_image: media.cover_image != undefined ? media.cover_image[0].filename : '',
+            boat_type: content.boat_type,
             boat_info: {
                 name: content.name,
                 width: content.width,
@@ -122,8 +123,10 @@ export const updateBoatInfo = async (req, res) => {
         const content = req.body
         const media = req.files
 
-        const data = new BoatInfo({
+        const data = {
+            _id: boat_id,
             cover_image: media.cover_image != undefined ? media.cover_image[0].filename : '',
+            boat_type: content.boat_type,
             boat_info: {
                 name: content.name,
                 width: content.width,
@@ -137,7 +140,7 @@ export const updateBoatInfo = async (req, res) => {
                 exterior: content.exterior,
                 price: content.price,
             }
-        })
+        }
 
         for(let i=0; i<req.files.boat_images; i++) {
             data.boat_images.push({name: req.files.images[i].filename})
