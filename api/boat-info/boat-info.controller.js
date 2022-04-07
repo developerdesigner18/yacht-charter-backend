@@ -6,7 +6,15 @@ import { response } from "express";
 // get all boat-info data
 export const getBoatInfoAll = async (req, res) => {
     try {
-        const data = await BoatInfo.find();
+        const data = await BoatInfo.find().select([
+            'cover_image',
+            'boat_type',
+            'boat_info.name',
+            'boat_info.width',
+            'boat_info.manufacturer',
+            'boat_info.mfg_year',
+            'boat_info.mfg_year',
+        ]);
         if (data <= 0) {
             res.status(401).send({
                 success: false,
