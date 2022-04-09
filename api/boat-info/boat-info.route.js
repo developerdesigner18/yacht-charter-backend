@@ -1,6 +1,7 @@
 import express from "express";
 import {
     getBoatInfoAll,
+    getBoatInfoAllByType,
     getBoatInfoById,
     insertBoatInfo,
     updateBoatInfo,
@@ -55,6 +56,7 @@ const uploadBoatImages = multer({
 })
 
 boatInfoRouter.get("/getBoatInfoAll", getBoatInfoAll)
+boatInfoRouter.get("/getBoatInfoAllByType", getBoatInfoAllByType)
 boatInfoRouter.get("/getBoatInfoById", getBoatInfoById)
 boatInfoRouter.post("/insertBoatInfo", checkJWT, uploadBoatImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'boat_images', maxCount: 20}]), insertBoatInfo)
 boatInfoRouter.post("/updateBoatInfo", checkJWT, uploadBoatImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'boat_images', maxCount: 20}]), updateBoatInfo)

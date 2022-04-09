@@ -38,6 +38,41 @@ export const getBoatInfoAll = async (req, res) => {
     }
 }
 
+export const getBoatInfoAllByType = async (req, res) => {
+    var btype = decodeURIComponent(req.query?.btype)
+    try {
+        const data = await BoatInfo.find({boat_type: btype}).select([
+            'cover_image',
+            'boat_type',
+            'boat_info.name',
+            'boat_info.width',
+            'boat_info.manufacturer',
+            'boat_info.mfg_year',
+            'boat_info.mfg_year',
+        ]);
+        if (data <= 0) {
+            res.status(401).send({
+                success: false,
+                message: 'boat-info data not found'
+            })
+        }
+        else {
+            res.status(200).send({
+                success: true,
+                data: data,
+                length: data.length,
+                message: 'boat-info data fetched successfully'
+            })
+        }
+    }
+    catch (err) {
+        res.status(401).send({
+            success: false,
+            message: 'boat-info.controller: ' + err.message
+        })
+    }
+}
+
 // get boat-info data by id
 export const getBoatInfoById = async (req, res) => {
     try {
