@@ -30,8 +30,8 @@ export const getHomeData = async (req, res) => {
     }
 }
 
-// insert home page data
-export const insertHomeData = async (req, res) => {
+// update home page data
+export const updateHomeData = async (req, res) => {
     try {
         // const { userId } = req.body;
         // const { company, position, city, description, fromdate, todate } = req.body

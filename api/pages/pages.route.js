@@ -1,7 +1,7 @@
 import express from "express";
 import {
     getHomeData,
-    insertHomeData,
+    updateHomeData,
     getQSpdData,
     insertQSpdData
 } from "./pages.controller.js";
@@ -99,6 +99,6 @@ const uploadQSpdContent = multer({
 })
 
 pagesRouter.get("/getHomeData", getHomeData)
-pagesRouter.post("/insertHomeData", checkJWT, uploadHomeContent.fields([{name: 'landing_video', maxCount: 1}, {name: 'image_1', maxCount: 1}]), insertHomeData)
+pagesRouter.post("/updateHomeData", checkJWT, uploadHomeContent.fields([{name: 'landing_video', maxCount: 1}, {name: 'image_1', maxCount: 1}]), updateHomeData)
 pagesRouter.get("/getQSpdData", getQSpdData)
 pagesRouter.post("/insertQSpdData", checkJWT, uploadQSpdContent.fields([{name: 'landing_video', maxCount: 1}, {name: 'image_1', maxCount: 1}]), insertQSpdData)
