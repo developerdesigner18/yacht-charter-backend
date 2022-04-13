@@ -104,8 +104,8 @@ export const getQSpdData = async (req, res) => {
     }
 }
 
-// insert q-spd page data
-export const insertQSpdData = async (req, res) => {
+// update q-spd page data
+export const updateQSpdData = async (req, res) => {
     try {
         // const { userId } = req.body;
         // const { company, position, city, description, fromdate, todate } = req.body
@@ -117,29 +117,21 @@ export const insertQSpdData = async (req, res) => {
         const content = req.body
         const media = req.files
         const data = {
-            media: {
-                landing_video: media.landing_video != undefined ? media.landing_video[0].filename : '',
-                image_1: media.image_1 != undefined ? media.image_1[0].filename : ''
-            },
-            content: {
-                tag_line: content.tag_line,
-                heading_1: content.heading_1,
-                description_1: content.description_1,
-                heading_2: content.heading_2,
-                sub_heading_2: content.sub_heading_2,
-                description_2: content.description_2,
-                heading_3: content.heading_3,
-                description_3: content.description_3,
-            },
+            cover_image: media.cover_image != undefined ? media.cover_image[0].filename : '',
+            price: content.price,
         };
 
+        for(let i = 0; i < media.images.length; i++) {
+            data.images.push({name: media.images[i].filepath + media.images[i].filename})
+        }
+
         // checkUserData(userId);
-        const homeData = await Pages.findByIdAndUpdate(page_id, data, {new: true})
+        const qSpdData = await Pages.findByIdAndUpdate(page_id, data, {new: true})
         // addData(userId, data, "work");
 
         res.status(201).send({
             success: true,
-            data: homeData,
+            data: qSpdData,
             message: 'q-spd page content updated successfully',
         })
     }

@@ -3,7 +3,7 @@ import {
     getHomeData,
     updateHomeData,
     getQSpdData,
-    insertQSpdData
+    updateQSpdData
 } from "./pages.controller.js";
 import multer from 'multer';
 import path from 'path';
@@ -101,4 +101,4 @@ const uploadQSpdContent = multer({
 pagesRouter.get("/getHomeData", getHomeData)
 pagesRouter.post("/updateHomeData", checkJWT, uploadHomeContent.fields([{name: 'landing_video', maxCount: 1}, {name: 'image_1', maxCount: 1}]), updateHomeData)
 pagesRouter.get("/getQSpdData", getQSpdData)
-pagesRouter.post("/insertQSpdData", checkJWT, uploadQSpdContent.fields([{name: 'landing_video', maxCount: 1}, {name: 'image_1', maxCount: 1}]), insertQSpdData)
+pagesRouter.post("/updateQSpdData", checkJWT, uploadQSpdContent.fields([{name: 'cover_image', maxCount: 1}, {name: 'images', maxCount: 20}]), updateQSpdData)
