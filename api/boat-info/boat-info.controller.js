@@ -171,10 +171,11 @@ export const insertBoatInfo = async (req, res) => {
             status: 'active'
         })
 
+        
         for(let i = 0; i < media.boat_images.length; i++) {
             data.boat_images.push({name: media.boat_images[i].filepath + media.boat_images[i].filename})
         }
-
+        
         // checkUserData(userId);
         const boatInfoData = await BoatInfo.create(data)
         // addData(userId, data, "work");
@@ -206,10 +207,13 @@ export const updateBoatInfo = async (req, res) => {
         const media = req.files
 
         const currentData = await BoatInfo.findById(boat_id).lean().exec();
-
+        let cover_image;
+        cover_image = media.cover_image != undefined
+                        ? media.cover_image[0].filepath + media.cover_image[0].filename
+                        : currentData.cover_image;
         const data = {
             _id: boat_id,
-            cover_image: media.cover_image != undefined ? media.cover_image[0].filepath + media.cover_image[0].filename : '',
+            cover_image: cover_image,
             boat_type: content.boat_type,
             boat_info: {
                 name: content.name,
@@ -227,12 +231,23 @@ export const updateBoatInfo = async (req, res) => {
             status: currentData.status
         }
 
-        for(let i=0; i<media.boat_images; i++) {
-            data.boat_images.push({name: media.images[i].filepath + media.images[i].filename})
-        }
-
+        // data.boat_images = []
+        // console.log('media.boat_images.length', media.boat_images.length);
+        // for(let i=0; i<media.boat_images.length; i++) {
+        //     console.log('################', media.boat_images[i]);
+        //     data.boat_images.push({name: media.boat_images[i].filepath + media.boat_images[i].filename})
+        // }
+        // console.log('-=-=-=-==-=-', data.boat_images);
         // checkUserData(userId);
-        const boatInfoData = await BoatInfo.findByIdAndUpdate(boat_id, data, {new: true})
+        let boatInfoData;
+        if (media?.boat_images) {
+            for(let i= 0; i< media.boat_images.length;i++) {
+                boatInfoData = await BoatInfo.findByIdAndUpdate(boat_id, {$push: {boat_images: {"name": media.boat_images[i].filepath + media.boat_images[i].filename }}}, {new: true})
+            }
+        } else {
+            boatInfoData = await BoatInfo.findByIdAndUpdate(boat_id, data, {new: true})
+        }
+        
         // addData(userId, data, "work");
 
         res.status(201).send({
@@ -273,6 +288,30 @@ export const changeBoatStatus = async (req, res) => {
     }
 }
 
+// delete single image from boat
+export const deleteBoatImage = async (req, res) => {
+    try {
+        const boat_id = req.query.bid
+        const image_id = req.query.iid
+        // checkUserData(userId);
+        const boatInfoData = await BoatInfo.findByIdAndUpdate(boat_id, {$pull : {boat_images: {_id : image_id}}}, {new: true})
+        // addData(userId, data, "work");
+
+        res.status(201).send({
+            success: true,
+            data: boatInfoData,
+            message: 'boat image deleted successfully',
+        })
+    }
+    catch (err) {
+        res.status(401).send({
+            success: false,
+            message: 'boat-info.controller: ' + err.message
+        });
+    }
+}
+
+// delete boat info
 export const deleteBoatInfo = async (req, res) => {
     try {
         const boat_id = req.query.bid

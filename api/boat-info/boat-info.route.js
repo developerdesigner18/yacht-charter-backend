@@ -7,6 +7,7 @@ import {
     insertBoatInfo,
     updateBoatInfo,
     changeBoatStatus,
+    deleteBoatImage,
     deleteBoatInfo
 } from "./boat-info.controller.js";
 import multer from 'multer';
@@ -64,4 +65,5 @@ boatInfoRouter.get("/getBoatInfoById", getBoatInfoById)
 boatInfoRouter.post("/insertBoatInfo", checkJWT, uploadBoatImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'boat_images', maxCount: 20}]), insertBoatInfo)
 boatInfoRouter.post("/updateBoatInfo", checkJWT, uploadBoatImages.fields([{name: 'cover_image', maxCount: 1}, {name: 'boat_images', maxCount: 20}]), updateBoatInfo)
 boatInfoRouter.post("/changeBoatStatus", checkJWT, changeBoatStatus)
+boatInfoRouter.delete("/deleteBoatImage", checkJWT, deleteBoatImage)
 boatInfoRouter.delete("/deleteBoatInfo", checkJWT, deleteBoatInfo)
