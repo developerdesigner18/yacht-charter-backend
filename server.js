@@ -54,19 +54,6 @@ app.get('/api/health', (req, res) => {
 //     next();
 //   });
 
-app.use('/api', restRouter)
-app.use('/auth', authRouter)
-
-app.use(express.static(__dirname + '/public'))
-
-if (config.NODE_ENV === "development") {
-    console.log("This is the development environment".inverse.yellow)
-    server = http.createServer(app)
-} else {
-    console.log("This is the production environment".inverse.yellow)
-    server = http.createServer(app)
-}
-
 mongoose.connect(
     config.DB_URL,
     {
@@ -80,6 +67,19 @@ mongoose.connect(
 .catch((err) => {
     console.log(`Error: ${err}`.red.inverse);
 })
+
+app.use('/api', restRouter)
+app.use('/auth', authRouter)
+
+app.use(express.static(__dirname + '/public'))
+
+if (config.NODE_ENV === "development") {
+    console.log("This is the development environment".inverse.yellow)
+    server = http.createServer(app)
+} else {
+    console.log("This is the production environment".inverse.yellow)
+    server = http.createServer(app)
+}
 
 let PORT = config.PORT || 8000;
 server.listen(PORT, async () => {
