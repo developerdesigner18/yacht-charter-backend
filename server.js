@@ -20,6 +20,20 @@ let server = null;
 const __dirname = path.resolve(path.dirname(''));
 // require("dotenv").config()
 
+mongoose.connect(
+    config.DB_URL,
+    {
+        useUnifiedTopology: true,
+        useNewUrlParser: true
+    }
+)
+.then(() => {
+    console.log('DB Connected Successfully!'.green)
+})
+.catch((err) => {
+    console.log(`Error: ${err}`.red.inverse);
+})
+
 app.use(cors())
 app.use(morgan('dev'));
 app.use(cookieParser());
@@ -53,20 +67,6 @@ app.get('/api/health', (req, res) => {
 //     res.header("X-Content-Type-Options", "nosniff")
 //     next();
 //   });
-
-mongoose.connect(
-    config.DB_URL,
-    {
-        useUnifiedTopology: true,
-        useNewUrlParser: true
-    }
-)
-.then(() => {
-    console.log('DB Connected Successfully!'.green)
-})
-.catch((err) => {
-    console.log(`Error: ${err}`.red.inverse);
-})
 
 app.use('/api', restRouter)
 app.use('/auth', authRouter)
