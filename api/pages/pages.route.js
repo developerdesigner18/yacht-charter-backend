@@ -73,27 +73,25 @@ var qSpdStorage = multer.diskStorage({
 
     filename: async function (req, file, cb) {
         // const decoded = await jwt.verify(req.headers.token, configKey.secrets.JWT_SECRET);
-        // const data = await Home.findOne({ page: "Home" })
-        // cb(null, data._id + "_" + Date.now() + "_" + file.originalname)
-        const extension = file.originalname.substring(file.originalname.lastIndexOf('.'));
-        cb(null, file.fieldname + extension)
+            // const data = await BoatInfo.findOne({ page: "Home" })
+            const extension = file.originalname.substring(file.originalname.lastIndexOf('.'));
+            cb(null, Math.random().toString(36).substring(2, 15) + "_" + Date.now() + extension)
     }
-
 })
 
 const uploadQSpdContent = multer({
     storage: qSpdStorage,
     fileFilter: function (req, file, cb) {
-        const fileType = /jpeg|jpg|png|mp4/;
+        const fileType = /jpeg|jpg|png/;
         // const fileType = /jpeg|jpg|png|gif|mp4|avi/;
         const extension = file.originalname.substring(file.originalname.lastIndexOf('.') + 1);
         const mimetype = fileType.test(file.mimetype);
         file.filepath = '/pages/q-spd/'
-
+        console.log('#####', file);
         if (mimetype && extension) {
             return cb(null, true);
         } else {
-            cb('Error: you can upload only jpeg|jpg|png image or mp4 video files');
+            cb('Error: you can upload only jpeg|jpg|png image files');
         }
     }
 })
