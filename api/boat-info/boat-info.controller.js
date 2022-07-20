@@ -143,12 +143,6 @@ export const getBoatInfoById = async (req, res) => {
 // insert boat-info page data
 export const insertBoatInfo = async (req, res) => {
     try {
-        // const { userId } = req.body;
-        // const { company, position, city, description, fromdate, todate } = req.body
-        // var data = content;
-        // const home = new Home(data);
-        // home.save()
-
         const content = req.body
         const media = req.files
 
@@ -170,16 +164,11 @@ export const insertBoatInfo = async (req, res) => {
             },
             status: 'active'
         })
-
         
         for(let i = 0; i < media.boat_images.length; i++) {
             data.boat_images.push({name: media.boat_images[i].filepath + media.boat_images[i].filename})
         }
-        
-        // checkUserData(userId);
         const boatInfoData = await BoatInfo.create(data)
-        // addData(userId, data, "work");
-
         res.status(201).send({
             success: true,
             data: boatInfoData,
@@ -197,11 +186,6 @@ export const insertBoatInfo = async (req, res) => {
 // update boat-info page data
 export const updateBoatInfo = async (req, res) => {
     try {
-        // const { userId } = req.body;
-        // const { company, position, city, description, fromdate, todate } = req.body
-        // var data = content;
-        // const home = new Home(data);
-        // home.save()
         const boat_id = req.query.bid
         const content = req.body
         const media = req.files
@@ -231,24 +215,13 @@ export const updateBoatInfo = async (req, res) => {
             status: currentData.status
         }
 
-        // data.boat_images = []
-        // console.log('media.boat_images.length', media.boat_images.length);
-        // for(let i=0; i<media.boat_images.length; i++) {
-        //     console.log('################', media.boat_images[i]);
-        //     data.boat_images.push({name: media.boat_images[i].filepath + media.boat_images[i].filename})
-        // }
-        // console.log('-=-=-=-==-=-', data.boat_images);
-        // checkUserData(userId);
         let boatInfoData;
+        boatInfoData = await BoatInfo.findByIdAndUpdate(boat_id, data, {new: true})
         if (media?.boat_images) {
-            for(let i= 0; i< media.boat_images.length;i++) {
+            for (let i= 0; i< media.boat_images.length; i++) {
                 boatInfoData = await BoatInfo.findByIdAndUpdate(boat_id, {$push: {boat_images: {"name": media.boat_images[i].filepath + media.boat_images[i].filename }}}, {new: true})
             }
-        } else {
-            boatInfoData = await BoatInfo.findByIdAndUpdate(boat_id, data, {new: true})
         }
-        
-        // addData(userId, data, "work");
 
         res.status(201).send({
             success: true,
@@ -270,10 +243,8 @@ export const changeBoatStatus = async (req, res) => {
         console.log(req.query);
         const boat_id = req.query.bid
         const status = req.query.status
-        // checkUserData(userId);
         const boatInfoData = await BoatInfo.findByIdAndUpdate(boat_id, {$set : {status: status}}, {new: true})
-        // addData(userId, data, "work");
-
+        
         res.status(201).send({
             success: true,
             data: boatInfoData,
@@ -293,10 +264,7 @@ export const deleteBoatImage = async (req, res) => {
     try {
         const boat_id = req.query.bid
         const image_id = req.query.iid
-        // checkUserData(userId);
         const boatInfoData = await BoatInfo.findByIdAndUpdate(boat_id, {$pull : {boat_images: {_id : image_id}}}, {new: true})
-        // addData(userId, data, "work");
-
         res.status(201).send({
             success: true,
             data: boatInfoData,
@@ -315,10 +283,7 @@ export const deleteBoatImage = async (req, res) => {
 export const deleteBoatInfo = async (req, res) => {
     try {
         const boat_id = req.query.bid
-        // checkUserData(userId);
         const boatInfoData = await BoatInfo.findByIdAndDelete(boat_id)
-        // addData(userId, data, "work");
-
         res.status(201).send({
             success: true,
             data: boatInfoData,
